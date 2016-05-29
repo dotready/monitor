@@ -8,8 +8,12 @@ any errors anymore
 
 ## Getting started
 
-VirtualBox is a requirement because the Vagrantfile is setup for a VirtualBox, not parallels or any other virtualization layer.
-You can get it [here](https://www.virtualbox.org/wiki/Downloads)
+### Requirements
+
+1.  VirtualBox, the Vagrantfile is setup for a VirtualBox, not parallels or any other virtualization layer. You can get it [here](https://www.virtualbox.org/wiki/Downloads)
+2.  A Gmail account
+
+### Setup and install the application
 
 1. git clone https://github.com/dotready/monitor.git
 2. cd monitor/vagrant
@@ -20,7 +24,8 @@ You can get it [here](https://www.virtualbox.org/wiki/Downloads)
 7. vagrant ssh (you are now in the guest system)
 8. cd /var/www/Moninitor/
 9. php composer.phar install
-10. visit https://monitor.videodock.com/
+10. Edit the mail.json config
+11. visit https://monitor.videodock.com/
 
 ## Command line
 
@@ -52,6 +57,27 @@ Each url configuration must have a host, sslOnOff, path and callback (executable
 
 The panic email address is setup once, to warn the developer/administrator to something is not right. This results in malformed json or a 404 in most cases.
 In the monitor section we have an array of url's with the said options.
+
+### The mail setup
+
+```json
+{
+  "settings": {
+    "server": [
+      {
+        "host": "smtp.gmail.com",
+        "port": 465,
+        "username": "gmail-username",
+        "password": "gmail-password"
+      }
+    ],
+    "sender": {
+      "fromMailAddress": "from@yourdomain.com",
+      "fromName": "Yourname"
+    }
+  }
+}
+```
 
 ### Services and dependency injection
 
