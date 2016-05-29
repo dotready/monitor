@@ -1,0 +1,81 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+module OS
+    def OS.windows?
+        (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+    end
+
+    def OS.mac?
+        (/darwin/ =~ RUBY_PLATFORM) != nil
+    end
+
+    def OS.unix?
+        !OS.windows?
+    end
+
+    def OS.linux?
+        OS.unix? and not OS.mac?
+    end
+end
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "ffuenf/debian-7.10.0-amd64"
+
+  config.vm.hostname = "monitor.videodock.com"
+  config.vm.network "private_network", ip: "192.168.34.20"
+
+  if OS.mac?
+    config.vm.synced_folder ".",  "/vagrant", type: :nfs
+    config.vm.synced_folder "..", "/mnt/vagrant-videodock-monitor", type: :nfs
+  else
+    config.vm.synced_folder "..", "/mnt/vagrant-videodock-monitor"
+  end
+
+  config.bindfs.bind_folder "/mnt/vagrant-videodock-monitor", "/var/www/Monitor",
+    owner: 'www-data',
+    group: 'www-data',
+    perms: 'u=rwX:g=rwX:o=rD',
+    mirror: 'vagrant'
+
+  config.ssh.forward_agent = true
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "Videodock monitor"
+
+    # Could be useful for debugging
+    # vb.gui = true
+
+    vb.customize ["modifyvm", :id, "--cpus", 2]
+    vb.memory = "1024"
+  end
+
+  if Vagrant.has_plugin?("vagrant-hostmanager")
+    config.hostmanager.enabled = true
+    config.hostmanager.manage_host = true
+    config.hostmanager.ignore_private_ip = false
+    config.hostmanager.include_offline = false
+  end
+
+  if Vagrant.has_plugin?("vagrant-cachier")
+    # Configure cached packages to be shared between instances of the same base box.
+    # Usage docs: http://fgrehm.viewdocs.io/vagrant-cachier/usage
+    config.cache.scope = :box
+
+    if OS.mac?
+      config.cache.synced_folder_opts = {
+        type: :nfs,
+        mount_options: ['rw', 'vers=3', 'tcp', 'nolock']
+      }
+    end
+  end
+
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.auto_update = false
+  end
+
+  config.vm.provision "shell", :path => 'scripts/setup.sh'
+  config.vm.provision "shell", :path => 'scripts/ssl_certificate.sh'
+  config.vm.provision "shell", :path => 'scripts/apache.sh'
+  config.vm.provision "shell", :path => 'scripts/php.sh'
+end

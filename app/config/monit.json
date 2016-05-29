@@ -1,0 +1,16 @@
+{
+  "panicEmailAddress": "klapvee@gmail.com",
+  "monitor": {
+    "urls": [
+      {
+        "ssl": true,
+        "host": "api-test.livedebatapp.nl",
+        "path": "/agenda",
+        "callback": "\\monitor\\library\\callback\\CallbackAgenda"
+      }
+    ],
+    "sockets": [
+
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+    "require": {
+        "silex/silex": "1.3.5",
+        "symfony/twig-bridge": "*",
+        "phpmailer/phpmailer": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "monitor\\": "src/monitor",
+            "config\\": "src/config",
+            "mail\\": "src/mail"
+        }
+    }
+}

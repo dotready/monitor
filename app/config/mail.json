@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "server": [
+      {
+        "host": "smtp.gmail.com",
+        "port": 465,
+        "username": "",
+        "password": ""
+      }
+    ],
+    "sender": {
+      "fromMailAddress": "",
+      "fromName": ""
+    }
+  }
+}
