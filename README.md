@@ -24,7 +24,7 @@ any errors anymore
 7. vagrant ssh (you are now in the guest system)
 8. cd /var/www/Moninitor/
 9. php composer.phar install
-10. Edit the mail.json config
+10. Edit the mail.json config (See The mail setup)
 11. visit https://monitor.videodock.com/
 
 ## Command line
